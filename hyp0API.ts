@@ -1,8 +1,8 @@
-import { RequestMessage, RequestPayload, ResponsePayload } from "./Type"
+import { HiveClient } from "./HiveClient";
+import { RequestPayload, ResponsePayload } from "./Type"
 
 const getUpTime = () => {
     const uptimeInSeconds = Date.now();
-    console.log("getUpTime")
     const data: ResponsePayload = {
         module: 'system',
         class: "hypo",
@@ -38,10 +38,10 @@ export class Hyp0API {
         }
     }
 
-    recive(data: RequestPayload): void {
+    async recive(data: RequestPayload): Promise<any> {
         this.storedData = data
-        console.log(data.content.requestType);
-
-        console.log(this.systemMetods.get(data.content.requestType)?.() ?? 'Error');
+        const hiveClient = new HiveClient
+        hiveClient.recive(this.systemMetods.get(data.content.requestType)?.() ?? 'Error')
+        return 'Ok'
     }
 }

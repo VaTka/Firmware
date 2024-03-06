@@ -1,4 +1,8 @@
+import { Router } from "./router";
+
 export class HiveClient {
-    recive(data: any) {
+    async recive(data: any) {
+        const router = new Router
+        router.send(data)
     }
 }
