@@ -1,4 +1,4 @@
 export class EventPool {
-    recive(data: any) {
+    receive(data: any) {
     }
 }

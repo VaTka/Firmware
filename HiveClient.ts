@@ -1,8 +1,13 @@
-import { Router } from "./router";
+import { router } from "../src"
 
 export class HiveClient {
-    async recive(data: any) {
-        const router = new Router
-        router.send(data)
+    public data: any
+
+    constructor() {
+        this.data = null
+    }
+
+    receive(data: any) {
+        this.data = data
     }
 }

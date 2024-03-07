@@ -1,5 +1,5 @@
 export class HiveConnector {
-    recive(data: any) {
+    receive(data: any) {
         console.log(data);
     }
 }
