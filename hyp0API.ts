@@ -5,10 +5,11 @@ import { hiveClient } from "./router";
 export class Hyp0API {
     private systemMetods: Map<string, Function>
     private storedData: RequestPayload
+    private startTime: any
 
     constructor() {
         this.systemMetods = new Map([
-            ["getUpTime", this.getUpTime]
+            ["getUpTime", this.getUpTime.bind(this)]
         ])
         this.storedData = {
             class: "hypo",
@@ -19,10 +20,11 @@ export class Hyp0API {
                 }
             }
         }
+        this.startTime = Date.now()
     }
 
     private getUpTime() {
-        const uptimeInSeconds = new Date;  
+        const lastTime: any = Date.now();  
         const data: ResponsePayload = {
             module: 'system',
             class: "hypo",
@@ -31,7 +33,7 @@ export class Hyp0API {
                 response: {
                     status: "success",
                     responseData: {
-                        data: uptimeInSeconds
+                        data: lastTime - this.startTime
                     }
                 }
             }
