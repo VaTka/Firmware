@@ -4,45 +4,38 @@ import { hiveClient } from "./router";
 
 export class Hyp0API {
     private systemMetods: Map<string, Function>
-    private storedData: RequestPayload
     private startTime: any
+    private respJson: ResponsePayload
 
     constructor() {
-        this.systemMetods = new Map([
-            ["getUpTime", this.getUpTime.bind(this)]
-        ])
-        this.storedData = {
-            class: "hypo",
-            content: {
-                requestType: "",
-                requestParameters: {
-                    data: null
-                }
-            }
-        }
-        this.startTime = Date.now()
-    }
-
-    private getUpTime() {
-        const lastTime: any = Date.now();  
-        const data: ResponsePayload = {
+        this.respJson = {
             module: 'system',
             class: "hypo",
             content: {
-                requestType: 'getUpTime',
+                requestType: '',
                 response: {
-                    status: "success",
+                    status: "error",
                     responseData: {
-                        data: lastTime - this.startTime
+                        data: {}
                     }
                 }
             }
         }
-        return data
+        this.systemMetods = new Map([
+            ["getUpTime", this.getUpTime.bind(this)]
+        ])
+        this.startTime = Date.now()
+    }
+
+    private getUpTime() {
+        const lastTime: any = Date.now();
+        this.respJson.content.requestType = "getUpTime"
+        this.respJson.content.response.status = "success"
+        this.respJson.content.response.responseData.data = lastTime - this.startTime
+        return this.respJson
     }
 
     async receive(data: RequestPayload): Promise<any> {
-        this.storedData = data
         hiveClient.receive(this.systemMetods.get(data.content.requestType)?.() ?? 'Error')
         return "ok"
     }

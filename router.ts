@@ -39,6 +39,6 @@ export class Router {
             id: data.id,
             payload: payload
         }
-        hiveConnector.receive(responsData)
+        hiveConnector.sendToHive(responsData)
     } 
 }
