@@ -1,4 +1,5 @@
 export class EventPool {
-    receive(data: any) {
+    async receive(data: any) {
+        return await "EventPool response"
     }
 }

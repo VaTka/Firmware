@@ -1,42 +1,43 @@
+import { sysData } from "./InitialData";
 import { RequestPayload, ResponsePayload } from "./Type"
-import { hiveClient } from "./router";
 
-
-export class Hyp0API {
-    private systemMetods: Map<string, Function>
-    private startTime: any
-    private respJson: ResponsePayload
+class systemMetods {
+    public systemMetods: Map<string, Function>
 
     constructor() {
-        this.respJson = {
-            module: 'system',
-            class: "hypo",
-            content: {
-                requestType: '',
-                response: {
-                    status: "error",
-                    responseData: {
-                        data: {}
-                    }
-                }
-            }
-        }
         this.systemMetods = new Map([
             ["getUpTime", this.getUpTime.bind(this)]
         ])
-        this.startTime = Date.now()
     }
 
     private getUpTime() {
-        const lastTime: any = Date.now();
-        this.respJson.content.requestType = "getUpTime"
-        this.respJson.content.response.status = "success"
-        this.respJson.content.response.responseData.data = lastTime - this.startTime
-        return this.respJson
+        const lastTime: number = Date.now();
+        return (sysData.get("date") !== undefined) ? lastTime - sysData.get("date")! : 0;
+    }
+}
+
+export class Hyp0API {
+    private systemMethods: systemMetods
+
+    constructor() {
+        this.systemMethods = new systemMetods();
     }
 
-    async receive(data: RequestPayload): Promise<any> {
-        hiveClient.receive(this.systemMetods.get(data.content.requestType)?.() ?? 'Error')
-        return "ok"
+    private createResponse(status: string, payload: RequestPayload, data: any) {
+        return {
+            module: payload.module,
+            requestMethod: payload.requestMethod,
+            response: {
+                status: status,
+                responseData: {
+                    data
+                }
+            }
+        }
+    }
+
+    async receive(payload: RequestPayload): Promise<any> {
+        const data = await this.systemMethods.systemMetods.get(payload.requestMethod)?.() ?? 'Error'
+        return this.createResponse('success', payload, data)
     }
 }

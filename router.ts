@@ -1,44 +1,36 @@
-import { hypo } from "../src"
-import { EventPool } from "./EventPool"
-import { HiveClient } from "./HiveClient"
-import { HiveConnector } from "./HiveConnector"
-import { RequestMessage, ResponseMessage } from "./Type"
+import { eventPool, hiveClient, hiveConnector, hypoApi } from "./InitialData"
+import { Message, ReportPayload, RequestPayload, ResponsePayload } from "./Type"
 
-export const hiveClient = new HiveClient
-export const eventPool = new EventPool
-export const hiveConnector = new HiveConnector
-
-export class Router {
-
-    async requestHandles(request: any) {
-        await this.receive(request)
-        this.send(request, hiveClient.data)
+const receive = async (request: Message) => {
+    let payloadData = {}
+    if (request.type == "request") {
+        console.log("Request");
+        payloadData = await hypoApi.receive(request.payload as RequestPayload)
+    } else if (request.type == "response") {
+        console.log("Response");
+        payloadData = await hiveClient.receive(request.payload as ResponsePayload)
+    } else if (request.type == "report") {
+        console.log("Report");
+        payloadData = await eventPool.receive(request.payload as ReportPayload)
     }
+    return payloadData
+}
 
-    receive = async (data: RequestMessage | ResponseMessage) => {
-        if (data.type == "request") {
-            console.log("Request");
-            hypo.receive(data.payload)
-        } else if (data.type == "response") {
-            console.log("Response");
-            hiveClient.receive(data.payload)
-        } else if (data.type == "report") {
-            console.log("Report");
-            eventPool.receive(data.payload)
-        }
+const send = (data: Message, payload: any) => {
+    console.log("Send");
+    const responsData = {
+        type: "response",
+        messageId: data.messageId,
+        timestamp: data.timestamp,
+        from: data.from,
+        to: data.to,
+        id: data.id,
+        payload: payload
     }
+    hiveConnector.sendToHive(responsData)
+}
 
-    send = async (data: any, payload: any) => {
-        console.log("Send");
-        const responsData = {
-            type: "response",
-            messageId: data.messageId,
-            timestamp: data.timestamp,
-            from: data.from,
-            to: data.to,
-            id: data.id,
-            payload: payload
-        }
-        hiveConnector.sendToHive(responsData)
-    } 
+export const Router = async (request: Message) => {
+    const payloadData = await receive(request)
+    send(request, payloadData)
 }
