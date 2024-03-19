@@ -1,21 +1,6 @@
 import { eventPool, hiveClient, hiveConnector, hypoApi } from "./InitialData"
 import { Message, ReportPayload, RequestPayload, ResponsePayload } from "./Type"
 
-const receive = async (request: Message) => {
-    let payloadData = {}
-    if (request.type == "request") {
-        console.log("Request");
-        payloadData = await hypoApi.receive(request.payload as RequestPayload)
-    } else if (request.type == "response") {
-        console.log("Response");
-        payloadData = await hiveClient.receive(request.payload as ResponsePayload)
-    } else if (request.type == "report") {
-        console.log("Report");
-        payloadData = await eventPool.receive(request.payload as ReportPayload)
-    }
-    return payloadData
-}
-
 const send = (data: Message, payload: any) => {
     console.log("Send");
     const responsData = {
@@ -31,6 +16,16 @@ const send = (data: Message, payload: any) => {
 }
 
 export const Router = async (request: Message) => {
-    const payloadData = await receive(request)
-    send(request, payloadData)
+    let payloadData = {}
+    if (request.type == "request") {
+        console.log("Request");
+        payloadData = await hypoApi.processRequest(request.payload as RequestPayload)
+        send(request, payloadData)
+    } else if (request.type == "response") {
+        console.log("Response");
+        payloadData = await hiveClient.receive(request.payload as ResponsePayload)
+    } else if (request.type == "report") {
+        console.log("Report");
+        payloadData = await eventPool.receive(request.payload as ReportPayload)
+    }
 }

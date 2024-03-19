@@ -24,7 +24,7 @@ export const initial = () => {
         "to": "B",
         "id": "6bd3712b538eea5da345b1f4ea5bc691cb9da0230e8eae0dae3fe26f9cf52f97",
         "payload": {
-            "module": "hypo",
+            "module": "system",
             "requestMethod": "getUpTime",
             "requestParameters": {
                 "hypoId": "Hello"

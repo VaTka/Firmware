@@ -34,6 +34,3 @@ export interface Message {
     id: string
     payload: RequestPayload | ResponsePayload | ReportPayload
 }
-
-// in ResponsePayload response and in RequestPayload requestParameters potentialy can be named the same way
-// Id in report?

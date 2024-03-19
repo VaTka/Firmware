@@ -1,13 +1,29 @@
 import { sysData } from "./InitialData";
-import { RequestPayload, ResponsePayload } from "./Type"
+import { RequestPayload } from "./Type"
 
 class systemMetods {
-    public systemMetods: Map<string, Function>
+    public systemMetods: any
 
     constructor() {
-        this.systemMetods = new Map([
-            ["getUpTime", this.getUpTime.bind(this)]
-        ])
+        this.systemMetods = {
+            "getUpTime": this.getUpTime
+        }
+    }
+
+    addModules(moduleName: string, desciption: Function) {
+        if (this.systemMetods.hasOwnProperty(moduleName)) {
+            throw new Error(`Method '${moduleName}' already exists.`);
+        } else {
+            this.systemMetods[moduleName] = desciption
+        }
+    }
+
+    removeModule(moduleName: string) {
+        if (!this.systemMetods.hasOwnProperty(moduleName)) {
+            throw new Error(`Method '${moduleName}' not exists.`);
+        } else {
+            delete this.systemMetods[moduleName]
+        }
     }
 
     private getUpTime() {
@@ -16,11 +32,27 @@ class systemMetods {
     }
 }
 
+class APIModule {
+    private properties: any;
+
+    constructor(properties: any) {
+        this.properties = properties
+    }
+
+    metodConstructor() {
+        return this.properties() 
+    }
+}
+
 export class Hyp0API {
-    private systemMethods: systemMetods
+    system: any
+    public modules: any
 
     constructor() {
-        this.systemMethods = new systemMetods();
+        this.system = new systemMetods()
+        this.modules = {
+            "system": this.system
+        }
     }
 
     private createResponse(status: string, payload: RequestPayload, data: any) {
@@ -36,8 +68,19 @@ export class Hyp0API {
         }
     }
 
-    async receive(payload: RequestPayload): Promise<any> {
-        const data = await this.systemMethods.systemMetods.get(payload.requestMethod)?.() ?? 'Error'
-        return this.createResponse('success', payload, data)
+    async processRequest(payload: RequestPayload): Promise<any> {
+        const method = await this.modules[payload.module][payload.requestMethod]?.()
+        let status = "success"
+        let data
+        method ? data = method : status = 'error'
+        return this.createResponse(status, payload, data)
+    }
+
+    addModule(className: string, properties: any) {
+        this.modules[className] = new APIModule(properties)
+    }
+
+    removeModule(className: string) {
+        delete this.modules[className]
     }
 }
