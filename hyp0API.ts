@@ -1,48 +1,5 @@
-import { sysData } from "./InitialData";
 import { RequestPayload } from "./Type"
-
-class systemMetods {
-    public systemMetods: any
-
-    constructor() {
-        this.systemMetods = {
-            "getUpTime": this.getUpTime
-        }
-    }
-
-    addModules(moduleName: string, desciption: Function) {
-        if (this.systemMetods.hasOwnProperty(moduleName)) {
-            throw new Error(`Method '${moduleName}' already exists.`);
-        } else {
-            this.systemMetods[moduleName] = desciption
-        }
-    }
-
-    removeModule(moduleName: string) {
-        if (!this.systemMetods.hasOwnProperty(moduleName)) {
-            throw new Error(`Method '${moduleName}' not exists.`);
-        } else {
-            delete this.systemMetods[moduleName]
-        }
-    }
-
-    private getUpTime() {
-        const lastTime: number = Date.now();
-        return (sysData.get("date") !== undefined) ? lastTime - sysData.get("date")! : 0;
-    }
-}
-
-class APIModule {
-    private properties: any;
-
-    constructor(properties: any) {
-        this.properties = properties
-    }
-
-    metodConstructor() {
-        return this.properties() 
-    }
-}
+import { APIModule, systemMetods } from './Methods/Methods'
 
 export class Hyp0API {
     system: any
@@ -58,7 +15,7 @@ export class Hyp0API {
     private createResponse(status: string, payload: RequestPayload, data: any) {
         return {
             module: payload.module,
-            requestMethod: payload.requestMethod,
+            requestMethod: payload.requestMethod, 
             response: {
                 status: status,
                 responseData: {
