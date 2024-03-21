@@ -1,27 +1,27 @@
 import { sysData } from "../InitialData";
 
-export class systemMetods {
-    public systemMetods: any
+export class systemModule {
+    public systemModule: any
 
     constructor() {
-        this.systemMetods = {
+        this.systemModule = {
             "getUpTime": this.getUpTime
         }
     }
 
     addModules(moduleName: string, desciption: Function) {
-        if (this.systemMetods.hasOwnProperty(moduleName)) {
+        if (this.systemModule.hasOwnProperty(moduleName)) {
             throw new Error(`Method '${moduleName}' already exists.`);
         } else {
-            this.systemMetods[moduleName] = desciption
+            this.systemModule[moduleName] = desciption
         }
     }
 
     removeModule(moduleName: string) {
-        if (!this.systemMetods.hasOwnProperty(moduleName)) {
+        if (!this.systemModule.hasOwnProperty(moduleName)) {
             throw new Error(`Method '${moduleName}' not exists.`);
         } else {
-            delete this.systemMetods[moduleName]
+            delete this.systemModule[moduleName]
         }
     }
 

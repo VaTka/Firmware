@@ -18,7 +18,7 @@ export interface ResponsePayload {
 }
 
 export interface ReportPayload {
-    module: "string" | "null"
+    module: string | null
     class: "action" | "log"
     content: {
         data: any

@@ -1,12 +1,12 @@
 import { RequestPayload } from "./Type"
-import { APIModule, systemMetods } from './Methods/Methods'
+import { APIModule, systemModule } from './Methods/Methods'
 
 export class Hyp0API {
     system: any
     public modules: any
 
     constructor() {
-        this.system = new systemMetods()
+        this.system = new systemModule()
         this.modules = {
             "system": this.system
         }
