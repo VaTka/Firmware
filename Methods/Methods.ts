@@ -1,4 +1,5 @@
 import { hypoApi, sysData } from "../InitialData";
+import modules from './index'
 
 export abstract class AbstractAPIModule {
     [key: string]: any
@@ -12,6 +13,14 @@ export class systemModule extends AbstractAPIModule {
         this.systemModule = {
             "getUpTime": this.getUpTime
         }
+    }
+
+    public addModule(moduleName: string) {
+        hypoApi.addModuleToHypoApi(moduleName, modules[moduleName])
+    }
+
+    public removeModule(moduleName: string) {
+        hypoApi.removeModuleFromHypoApi(moduleName)
     }
 
     private getUpTime() {

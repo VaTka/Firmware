@@ -1,6 +1,7 @@
 import { EventPool } from './EventPool'
 import { HiveClient } from './HiveClient'
 import { HiveConnector } from './HiveConnector'
+import { systemModule } from './Methods/Methods'
 import { Message } from './Type'
 import { Hyp0API } from './hyp0API'
 import { Router } from './router'
@@ -9,6 +10,7 @@ export const hypoApi = new Hyp0API()
 export const hiveClient = new HiveClient
 export const eventPool = new EventPool
 export const hiveConnector = new HiveConnector
+export const sysModule = new systemModule()
 
 
 export const sysData = new Map([
