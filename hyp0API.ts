@@ -1,21 +1,17 @@
-import { RequestPayload } from "./Type"
-import { APIModule, systemModule } from './Methods/Methods'
+import { RequestPayload, ResponsePayload } from "./Type"
+import { AbstractAPIModule, systemModule } from './Methods/Methods'
 
 export class Hyp0API {
-    system: any
-    public modules: any
+    public modules: { [key: string]: AbstractAPIModule } = {}
 
     constructor() {
-        this.system = new systemModule()
-        this.modules = {
-            "system": this.system
-        }
+        this.modules = {}
     }
 
-    private createResponse(status: string, payload: RequestPayload, data: any) {
+    private createResponse(status: "success" | "error", payload: RequestPayload, data?: any): ResponsePayload {
         return {
             module: payload.module,
-            requestMethod: payload.requestMethod, 
+            requestMethod: payload.requestMethod,
             response: {
                 status: status,
                 responseData: {
@@ -25,19 +21,22 @@ export class Hyp0API {
         }
     }
 
-    async processRequest(payload: RequestPayload): Promise<any> {
-        const method = await this.modules[payload.module][payload.requestMethod]?.()
-        let status = "success"
-        let data
-        method ? data = method : status = 'error'
-        return this.createResponse(status, payload, data)
+    public async processRequest(payload: RequestPayload): Promise<ResponsePayload> {
+        try {
+            const method = await this.modules[payload.module][payload.requestMethod]()
+            return this.createResponse("success", payload, method)
+        } catch { return this.createResponse("error", payload) }
     }
 
-    addModule(className: string, properties: any) {
-        this.modules[className] = new APIModule(properties)
+    private addModule<T extends AbstractAPIModule>(ctor: new (...args: any[]) => T, ...args: any[]): T {
+        return new ctor(...args);
     }
 
-    removeModule(className: string) {
+    public addModuleToHypoApi(moduleName: string, properties: any) {
+        this.modules[moduleName] = this.addModule(properties);
+    }
+
+    public removeModuleFromHypoApi(className: string) {
         delete this.modules[className]
     }
 }
