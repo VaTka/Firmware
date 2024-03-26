@@ -1,5 +1,4 @@
 import { eventPool, hiveClient, hiveConnector, hypoApi } from "./InitialData"
-import { systemModule } from "./Methods/Methods";
 import { Message, ReportPayload, RequestPayload, ResponsePayload } from "./Type"
 
 const send = (data: Message, payload: any) => {
@@ -20,7 +19,6 @@ export const Router = async (request: Message) => {
     let payloadData = {}
     if (request.type == "request") {
         console.log("Request");
-        hypoApi.addModuleToHypoApi("system", systemModule)
         payloadData = await hypoApi.processRequest(request.payload as RequestPayload)
         send(request, payloadData)
     } else if (request.type == "response") {

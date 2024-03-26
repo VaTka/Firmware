@@ -1,7 +1,7 @@
 import { EventPool } from './EventPool'
 import { HiveClient } from './HiveClient'
 import { HiveConnector } from './HiveConnector'
-import { systemModule } from './Methods/Methods'
+import { systemModule } from './Medules/Methods'
 import { Message } from './Type'
 import { Hyp0API } from './hyp0API'
 import { Router } from './router'
@@ -16,6 +16,10 @@ export const sysModule = new systemModule()
 export const sysData = new Map([
     ["date", Date.now()],
 ])
+
+hypoApi.addModuleToHypoApi("system", systemModule)
+sysModule.addModule("core")
+hypoApi.removeModuleFromHypoApi("system")
 
 export const initial = () => {
     const data: Message = {

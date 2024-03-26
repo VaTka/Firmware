@@ -1,5 +1,5 @@
 import { RequestPayload, ResponsePayload } from "./Type"
-import { AbstractAPIModule } from './Methods/Methods'
+import { AbstractAPIModule } from './Medules/Methods'
 
 export class Hyp0API {
     public modules: { [key: string]: AbstractAPIModule } = {}
