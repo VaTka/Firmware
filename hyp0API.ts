@@ -1,8 +1,8 @@
+import AbstractAPIModule from "./Medules/interface"
 import { RequestPayload, ResponsePayload } from "./Type"
-import { AbstractAPIModule } from './Medules/Methods'
 
 export class Hyp0API {
-    public modules: { [key: string]: AbstractAPIModule } = {}
+    private modules: { [key: string]: AbstractAPIModule } = {}
 
     constructor() {
         this.modules = {}
@@ -28,11 +28,13 @@ export class Hyp0API {
         } catch { return this.createResponse("error", payload) }
     }
 
-    public addModuleToHypoApi<T extends AbstractAPIModule>(moduleName: string, ctor: new (...args: any[]) => T, ...args: any[]) {
-        this.modules[moduleName] = new ctor(...args);
+    public addModule<T extends AbstractAPIModule>(ctor: new (...args: any[]) => T, ...args: any[]) {
+        const module = new ctor(...args);
+        this.modules[module.constructor.name] = module
+        console.log(this.modules);
     }
 
-    public removeModuleFromHypoApi(moduleName: string) {
+    public removeModule(moduleName: string) {
         delete this.modules[moduleName]
     }
 }

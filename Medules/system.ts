@@ -1,12 +1,9 @@
 import { hypoApi, sysData } from "../InitialData";
 import modules from './index'
+import AbstractAPIModule from './interface'
 
-export abstract class AbstractAPIModule {
-    [key: string]: any
-}
-
-export class systemModule extends AbstractAPIModule {
-    public systemModule: {[key: string]: () => {}}
+export default class systemModule extends AbstractAPIModule {
+    private systemModule: {[key: string]: () => {}}
 
     constructor() {
         super();
@@ -16,11 +13,11 @@ export class systemModule extends AbstractAPIModule {
     }
 
     public addModule(moduleName: string) {
-        hypoApi.addModuleToHypoApi(moduleName, modules[moduleName])
+        hypoApi.addModule(modules[moduleName])
     }
 
     public removeModule(moduleName: string) {
-        hypoApi.removeModuleFromHypoApi(moduleName)
+        hypoApi.removeModule(moduleName)
     }
 
     private getUpTime() {

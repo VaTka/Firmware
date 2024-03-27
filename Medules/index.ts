@@ -1,4 +1,4 @@
-import { systemModule } from "./Methods";
+import systemModule from "./system";
 import core from "./core"
 
 const modules: { [key: string]: any } = {

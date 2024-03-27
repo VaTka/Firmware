@@ -1,4 +1,4 @@
-import { eventPool, hiveClient, hiveConnector, hypoApi } from "./InitialData"
+import { hiveClient, hiveConnector, hypoApi } from "./InitialData"
 import { Message, ReportPayload, RequestPayload, ResponsePayload } from "./Type"
 
 const send = (data: Message, payload: any) => {
@@ -26,6 +26,5 @@ export const Router = async (request: Message) => {
         payloadData = await hiveClient.receive(request.payload as ResponsePayload)
     } else if (request.type == "report") {
         console.log("Report");
-        payloadData = await eventPool.receive(request.payload as ReportPayload)
     }
 }
