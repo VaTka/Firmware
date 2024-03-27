@@ -5,15 +5,15 @@ import AbstractAPIModule from './interface'
 export default class systemModule extends AbstractAPIModule {
     private systemModule: {[key: string]: () => {}}
 
-    constructor() {
+    constructor(private args?: any[]) {
         super();
         this.systemModule = {
             "getUpTime": this.getUpTime
         }
     }
 
-    public addModule(moduleName: string) {
-        hypoApi.addModule(modules[moduleName])
+    public addModule(moduleName: string, ...args: any[]) {
+        hypoApi.addModule(modules[moduleName], ...args)
     }
 
     public removeModule(moduleName: string) {

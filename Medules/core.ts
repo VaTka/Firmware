@@ -1,1 +1,3 @@
-export default class core{}
+export default class core{
+    constructor(private args?: any[]){}
+}
