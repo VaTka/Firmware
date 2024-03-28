@@ -23,7 +23,7 @@ export class Hyp0API {
 
     public async processRequest(payload: RequestPayload): Promise<ResponsePayload> {
         try {
-            const method = await this.modules[payload.module][payload.requestMethod]()
+            const method = await this.modules[payload.module][payload.requestMethod](payload.requestParameters)
             return this.createResponse("success", payload, method)
         } catch { return this.createResponse("error", payload) }
     }

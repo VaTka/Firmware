@@ -6,8 +6,8 @@ const send = (data: Message, payload: any) => {
     const responsData = {
         type: "response",
         messageId: data.messageId,
-        timestamp: data.timestamp,
-        from: data.from,
+        timestamp: new Date(),
+        from: payload.module,
         to: data.to,
         id: data.id,
         payload: payload

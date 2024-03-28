@@ -3,7 +3,7 @@ import modules from './index'
 import AbstractAPIModule from './interface'
 
 export default class systemModule extends AbstractAPIModule {
-    private systemModule: {[key: string]: () => {}}
+    private systemModule: {[key: string]: (...args: any[]) => {}}
 
     constructor(private args?: any[]) {
         super();
@@ -12,7 +12,7 @@ export default class systemModule extends AbstractAPIModule {
         }
     }
 
-    public addModule(moduleName: string, ...args: any[]) {
+    public addModule(moduleName: string, ...args: any[]) {        
         hypoApi.addModule(modules[moduleName], ...args)
     }
 
@@ -20,7 +20,7 @@ export default class systemModule extends AbstractAPIModule {
         hypoApi.removeModule(moduleName)
     }
 
-    private getUpTime() {
+    private getUpTime(data: any): number {
         const lastTime: number = Date.now();
         return (sysData.get("date") !== undefined) ? lastTime - sysData.get("date")! : 0;
     }

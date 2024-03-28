@@ -30,7 +30,7 @@ export const initial = () => {
             "module": "systemModule",
             "requestMethod": "getUpTime",
             "requestParameters": {
-                "hypoId": "Hello"
+                "hypoId": "23523233342"
             }
         }
     }
